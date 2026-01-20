@@ -19,7 +19,14 @@ import UIKit
 /// A Diagnostics Logger to log messages to which will end up in the Diagnostics Report if using the default `LogsReporter`.
 /// Will keep a `.txt` log in the documents directory with the latestlogs with a max size of 2 MB.
 public final class DiagnosticsLogger: Sendable {
+    /// Whether system logs (stdout/stderr) should be captured. Set before calling `setup()`.
+    /// Safe: configured once at app launch before any concurrent access.
+    public static nonisolated(unsafe) var isSystemLoggingEnabled = true
+
     static let standard = DiagnosticsLogger()
+
+    /// Safe: set once in setup(), then read-only.
+    private nonisolated(unsafe) var _isSetup = false
 
     private static let logFileLocation: URL = FileManager.default.applicationSupportDirectory.appendingPathComponent("diagnostics_log.txt")
 
@@ -45,7 +52,7 @@ public final class DiagnosticsLogger: Sendable {
 
     /// Whether the logger is setup and ready to use.
     private var isSetup: Bool {
-        inputPipe.fileHandleForReading.readabilityHandler != nil || isRunningTests
+        _isSetup || isRunningTests
     }
 
     /// Whether the logger is setup and ready to use.
@@ -103,9 +110,12 @@ extension DiagnosticsLogger {
             }
         }
 
-        setupPipe()
+        if Self.isSystemLoggingEnabled {
+            setupPipe()
+        }
         metricsMonitor.startMonitoring()
         startNewSession()
+        _isSetup = true
     }
 }
 

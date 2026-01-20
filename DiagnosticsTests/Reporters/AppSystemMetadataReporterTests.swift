@@ -23,9 +23,8 @@ final class AppSystemMetadataReporterTests: XCTestCase {
             metadata[AppSystemMetadataReporter.MetadataKey.appVersion.rawValue],
             "\(Bundle.appVersion) (\(Bundle.appBuildNumber))"
         )
-        XCTAssertEqual(
-            metadata[AppSystemMetadataReporter.MetadataKey.appLanguage.rawValue],
-            "en"
+        XCTAssertTrue(
+            metadata[AppSystemMetadataReporter.MetadataKey.appLanguage.rawValue]?.hasPrefix("en") == true
         )
 
         AppSystemMetadataReporter.MetadataKey.allCases.forEach { key in

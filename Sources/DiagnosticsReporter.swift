@@ -152,7 +152,9 @@ extension DiagnosticsReporter {
         }
         html += "<li><button id=\"expand-sections\">Expand sessions</button></li>"
         html += "<li><button id=\"collapse-sections\">Collapse sessions</button></li>"
-        html += "<li><input type=\"checkbox\" id=\"system-logs\" name=\"system-logs\" checked><label for=\"system-logs\">Show system logs</label></li>"
+        if DiagnosticsLogger.isSystemLoggingEnabled {
+            html += "<li><input type=\"checkbox\" id=\"system-logs\" name=\"system-logs\" checked><label for=\"system-logs\">Show system logs</label></li>"
+        }
         html += "<li><input type=\"checkbox\" id=\"error-logs\" name=\"error-logs\" checked><label for=\"error-logs\">Show error logs</label></li>"
         html += "<li><input type=\"checkbox\" id=\"debug-logs\" name=\"debug-logs\" checked><label for=\"debug-logs\">Show debug logs</label></li>"
         html += "</ul></nav></aside>"
