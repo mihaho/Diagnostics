@@ -114,8 +114,8 @@ extension DiagnosticsLogger {
             setupPipe()
         }
         metricsMonitor.startMonitoring()
-        startNewSession()
         _isSetup = true
+        startNewSession()
     }
 }
 
